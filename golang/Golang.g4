@@ -164,7 +164,7 @@ grammar Golang;
 
 //SourceFile       = PackageClause ";" { ImportDecl ";" } { TopLevelDecl ";" } .
 sourceFile
-    : packageClause eos ( importDecl eos )* ( topLevelDecl eos)*
+    : packageClause eos ( importDecl eos )* ( topLevelDecl eos )*
     ;
 
 //PackageClause  = "package" PackageName .
@@ -223,7 +223,7 @@ expressionList
 
 //TypeDecl     = "type" ( TypeSpec | "(" { TypeSpec ";" } ")" ) .
 typeDecl
-    : 'type' ( typeSpec | '(' ( typeSpec ';' )* ')' )
+    : 'type' ( typeSpec | '(' ( typeSpec eos )* ')' )
     ;
 
 //TypeSpec     = identifier Type .
@@ -553,7 +553,8 @@ functionType
     ;
 
 signature
-    : parameters result?
+    : {noTerminatorAfterParams(1)}? parameters result
+    | parameters
     ;
 
 result
